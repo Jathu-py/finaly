@@ -1,0 +1,633 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<button data-toggle="modal" data-target="#addNewStudent" class="btn btn-dark mb-2">
+    <i class="fas fa-plus"></i> Add Student
+</button>
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                    <th>Mobile No</th>
+                    <th>Home No</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for student in students %}
+                <tr>
+                    <th>{{'%02d' %loop.index}}</th>
+                    <th>{{student.studentName}}</th>
+                    <th>{{student.email}}</th>
+                    <th>{{student.dob}}</th>
+                    <th>{{student.gender}}</th>
+                    <th>{{student.mobileNo}}</th>
+                    <th>{{student.homeNo}}</th>
+                    <th>{{student.address}}</th>
+
+                    <th><div class="btn-group" role="group" aria-label="Edit & Delete">
+                        <button  data-toggle="modal" data-target="#edit_students" type="button" class="btn btn-warning" id="edit_student" data-value="{{student.id}}"><i class="fa fa-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-danger" id="delete_cource" data-value="{{student.id}}"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" id="attach_img" data-value="{{student.id}}" data-target="#staticBackdrop"><i class="fa fa-paperclip" aria-hidden="true"></i> Attach </button>
+                    </div>
+                    </th>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!--New Student-->
+<div class="modal fade" id="addNewStudent" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-user-plus"></i> Add New Student</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtStudentName" class="control-label">Name :</label>
+                    <input type="text" id='txtStudentName' class="form-control" value="" >
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentEmail" class="control-label">Email :</label>
+                    <input type="email" id='txtStudentEmail' class="form-control" value="" >
+                </div>
+                <span class="validationText" id='validtxtEmail'>Please enter the valid email address<br></span>
+
+
+                <div class="form-group">
+                    <label for="txtStudentgender" class="control-label">Gender :</label>
+                    
+                    <select class="custom-select" id='txtStudentgender'>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                      </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentDob" class="control-label">DOB :</label>
+                    <input type="date" id='txtStudentDob' class="form-control" value="" >
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentNo" class="control-label">Mobile No :</label>
+                    <input type="number" id='txtStudentNo' class="form-control" value="" >
+                </div>
+                
+                <div class="form-group">
+                    <label for="txtStudentHomeNo" class="control-label">Home No :</label>
+                    <input type="number" id='txtStudentHomeNo' class="form-control" value="" >
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentAddress" class="control-label">Address :</label>
+                    <input type="text" id='txtStudentAddress' class="form-control" value="" >
+                </div>
+
+                <div class="form-actions text-right">
+                    <button id='btnAddStudent' class="btn btn-dark">Add Student</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--New Student-->
+
+<!--Edit Student-->
+<div class="modal fade" id="edit_students" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-user-plus"></i> Edit Student</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group" hidden>
+                    <label for="txtStudentIdEdit" class="control-label">Student Id :</label>
+                    <input type="text" id='txtStudentIdEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentNameEdit" class="control-label">Name :</label>
+                    <input type="text" id='txtStudentNameEdit' class="form-control" value="" >
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentEmailEdit" class="control-label">Email :</label>
+                    <input type="email" id='txtStudentEmailEdit' class="form-control" value="" >
+                </div>
+                <span class="validationText" id='validtxtEmail'>Please enter the valid email address<br></span>
+
+
+                <div class="form-group">
+                    <label for="txtStudentgender" class="control-label">Selected Gender Is  : <i id="txtGenderLabel" style='color:red'></i></label>
+                    <select class="custom-select" id='txtStudentgenderEdit'>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                      </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentDobEdit" class="control-label">DOB :</label>
+                    <input type="date" id='txtStudentDobEdit' class="form-control" value="" >
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentNoEdit" class="control-label">Mobile No :</label>
+                    <input type="number" id='txtStudentNoEdit' class="form-control" value="" >
+                </div>
+                
+                <div class="form-group">
+                    <label for="txtStudentHomeNoEdit" class="control-label">Home No :</label>
+                    <input type="number" id='txtStudentHomeNoEdit' class="form-control" value="" >
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStudentAddressEdit" class="control-label">Address :</label>
+                    <input type="text" id='txtStudentAddressEdit' class="form-control" value="" >
+                </div>
+
+
+                <div class="form-actions text-right">
+                    <button id='btnUpdateStudent' class="btn btn-dark">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Edit Student-->
+
+<!--Attachments-->
+
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel"><i class="fas fa-user-plus"></i>Add Student Image</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="text" id="attch_name" name="name" hidden>
+                <br>
+                <label for="image">Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary"  onclick="uploadData()">Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--Attachments-->
+<script>
+    $(document).ready( function () {
+        $("#validtxtEmail").hide();
+        $("#txtStudentEmail").on("change", function () {
+            $("#validtxtEmail").hide();
+        });
+        $('.dataTable').DataTable({
+            responsive: true
+        });
+    } );
+    //Add Student
+    $("body").on("click", "#btnAddStudent", function () {
+        var formData = new FormData();
+
+        var txtStudentName = $("#txtStudentName").val();
+        formData.append("txtStudentName", txtStudentName);
+
+        var txtStudentEmail = $("#txtStudentEmail").val();
+        formData.append("txtStudentEmail", txtStudentEmail);
+
+        var txtStudentDob = $("#txtStudentDob").val();
+        formData.append("txtStudentDob", txtStudentDob);
+
+        var txtStudentNo = $("#txtStudentNo").val();
+        formData.append("txtStudentNo", txtStudentNo);
+
+        var txtStudentHomeNo = $("#txtStudentHomeNo").val();
+        formData.append("txtStudentHomeNo", txtStudentHomeNo);
+
+        var txtStudentAddress = $("#txtStudentAddress").val();
+        formData.append("txtStudentAddress", txtStudentAddress);
+
+        var txtStudentgender = $("#txtStudentgender").val();
+        formData.append("txtStudentgender", txtStudentgender);
+
+        //Validations
+
+        if (txtStudentName === "" || txtStudentAddress === "" || txtStudentHomeNo === "" || txtStudentNo === "" || txtStudentDob === "" || txtStudentEmail === "" || txtStudentgender === "" ) {
+            $.alert({
+                title: "Alert!",
+                content: "Fields cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        console.log(txtStudentEmail)
+        if (isEmailCheck(txtStudentEmail)) {
+            $("#validtxtEmail").hide();
+          } else {
+            $("#validtxtEmail").show();
+            $("#txtStudentEmail").focus();
+            return false;
+        }
+        //Validations
+
+        $.ajax({
+            url: "/add-student",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+
+                $.alert({
+                    title: "Success!",
+                    content: "Student added <strong>Successfully!</strong>.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+    });
+    //Add Student
+
+    //Edit Student
+    $(document).on('click', '#edit_student', function(event){
+        event.preventDefault();
+
+        var studentId  = $(this).data('value');
+
+        var studentsQuery = {{ students | tojson | safe}}
+
+        for (var i = 0; i < studentsQuery.length; i++) {
+            if (studentsQuery[i].id === parseInt(studentId)) {
+                console.log(studentsQuery[i]);
+
+                $("#txtStudentIdEdit").val(studentsQuery[i].id);
+                
+                $("#txtStudentNameEdit").val(studentsQuery[i].studentName);
+                
+                $("#txtGenderLabel").text(studentsQuery[i].gender)
+
+                $("#txtStudentEmailEdit").val(studentsQuery[i].email);
+
+                var StuDOB = new Date(studentsQuery[i].dob);
+
+                // Extract year, month, and date components
+                var year = StuDOB.getFullYear();
+                var month = ('0' + (StuDOB.getMonth() + 1)).slice(-2); // Months are 0-indexed
+                var day = ('0' + StuDOB.getDate()).slice(-2);
+
+                // Construct the formatted date string
+                var formattedDate = year + '-' + month + '-' + day;
+
+                $("#txtCourceStartDateEdit").val(formattedDate);
+
+                $("#txtStudentDobEdit").val(formattedDate);
+
+                $("#txtStudentNoEdit").val(studentsQuery[i].mobileNo);
+
+                $("#txtStudentHomeNoEdit").val(studentsQuery[i].homeNo);
+
+                $("#txtStudentAddressEdit").val(studentsQuery[i].address);
+    
+
+            }
+        }
+
+    });
+
+    $("body").on('click',"#btnUpdateStudent",function(){
+        var formData = new FormData();
+
+        var txtStudentId = $("#txtStudentIdEdit").val();
+        formData.append("txtStudentId", txtStudentId);
+
+        var txtStudentName = $("#txtStudentNameEdit").val();
+        formData.append("txtStudentName", txtStudentName);
+
+        var txtStudentEmail = $("#txtStudentEmailEdit").val();
+        formData.append("txtStudentEmail", txtStudentEmail);
+
+        var txtStudentDob = $("#txtStudentDobEdit").val();
+        formData.append("txtStudentDob", txtStudentDob);
+
+        var txtStudentNo = $("#txtStudentNoEdit").val();
+        formData.append("txtStudentNo", txtStudentNo);
+
+        var txtStudentHomeNo = $("#txtStudentHomeNoEdit").val();
+        formData.append("txtStudentHomeNo", txtStudentHomeNo);
+
+        var txtStudentAddress = $("#txtStudentAddressEdit").val();
+        formData.append("txtStudentAddress", txtStudentAddress);
+
+        var txtStudentgender = $("#txtStudentgenderEdit").val();
+        formData.append("txtStudentgender", txtStudentgender);
+
+        //Validations
+        if (txtStudentId == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Student Id cannot be found. Try Again!",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Reload",
+                        btnClass: "btn-orange",
+                        action: function () {
+                            // Reload the page
+                            location.reload();
+                        },
+                    },
+                },
+            });
+            return false;
+        }
+        
+        if (txtStudentName === "" || txtStudentAddress === "" || txtStudentHomeNo === "" || txtStudentNo === "" || txtStudentDob === "" || txtStudentEmail === "" || txtStudentgender === "" ) {
+            $.alert({
+                title: "Alert!",
+                content: "Fields cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        console.log(txtStudentEmail)
+        if (isEmailCheck(txtStudentEmail)) {
+            $("#validtxtEmail").hide();
+          } else {
+            $("#validtxtEmail").show();
+            $("#txtStudentEmailEdit").focus();
+            return false;
+        }
+        //Validations
+
+        $.ajax({
+            url: "/edit-student",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+
+                $.alert({
+                    title: "Success!",
+                    content: "Student Updated <strong>Successfully!</strong>.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+
+
+    });
+    //Edit Student
+
+    //Delete Student
+    $(document).on('click', '#delete_cource', function(event){
+        event.preventDefault();
+        var txtStudentId  = $(this).data('value');
+        var formData = new FormData();
+
+        if (txtStudentId == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Student Id cannot be found. Try Again!",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Reload",
+                        btnClass: "btn-orange",
+                        action: function () {
+                            // Reload the page
+                            location.reload();
+                        },
+                    },
+                },
+            });
+            return false;
+        }
+
+        formData.append("txtStudentId", txtStudentId);
+
+        $.ajax({
+            url: "/delete-student",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+                if(data.status == 'success'){
+                    $.alert({
+                        title: "Success!",
+                        content: "Student Deleted <strong>Successfully!</strong>.",
+                        icon: "fa fa-check-circle",
+                        type: "green",
+                        buttons: {
+                            Okay: {
+                                text: "Okay",
+                                btnClass: "btn-green",
+                                action: function () {
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                } else if (data.status == 'error') {
+                    $.alert({
+                        title: "Alert!",
+                        content: "Student is linked in class.",
+                        icon: "fa fa-exclamation-triangle",
+                        type: "orange",
+                        buttons: {
+                            okay: {
+                                text: "close",
+                                btnClass: "btn-red",
+                                action: function () {
+                                    // Reload the page
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                }
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+
+
+    });
+    //Delete-student
+
+    //Attachments
+
+    $(document).on('click', '#attach_img', function(event){
+        event.preventDefault();
+
+        var studentId  = $(this).data('value');
+
+        var studentsQuery = {{ students | tojson | safe}}
+
+        for (var i = 0; i < studentsQuery.length; i++) {
+            if (studentsQuery[i].id === parseInt(studentId)) {
+                console.log(studentsQuery[i]);
+
+                $("#attch_name").val(studentsQuery[i].id);
+
+            }
+        }
+
+    });
+
+    function uploadData() {
+        var form = document.getElementById('uploadForm');
+        var formData = new FormData(form);
+    
+        $.ajax({
+            type: 'POST',
+            url: '/upload',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('Data successfully sent to the API.');
+                console.log('Response:', response);
+                if(response == 'success') {
+                    $.alert({
+                        title: "Success!",
+                        content: "Image <strong>Successfully!</strong> uploaded.",
+                        icon: "fa fa-check-circle",
+                        type: "green",
+                        buttons: {
+                            Okay: {
+                                text: "Okay",
+                                btnClass: "btn-green",
+                                action: function () {
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                }
+                else{
+                    $.alert({
+                        title: "Alert!",
+                        content: "Please try again later server is busy now.",
+                        icon: "fa fa-exclamation-triangle",
+                        type: "orange",
+                        buttons: {
+                            okay: {
+                                text: "close",
+                                btnClass: "btn-red",
+                                action: function () {
+                                    // Reload the page
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Failed to send data to the API.');
+                console.error('Status Code:', xhr.status);
+                console.error('Response:', xhr.responseText);
+            }
+        });
+    }
+
+    //Attachments
+</script>
+{% endblock %}

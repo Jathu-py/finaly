@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RTFAS | {% block title %}{% endblock %}</title>
+
+  <link rel="shortcut icon" href="{{url_for('static', filename='image/favicon/favicon.ico')}}">
+  <link rel="apple-touch-icon" href="{{url_for('static', filename='image/favicon/apple-touch-icon.png')}}">
+  <link rel="icon" href="{{url_for('static', filename='image/favicon/favicon.ico')}}">
+
+  <!--CSS-->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+
+  <link rel="stylesheet" href="{{url_for('static', filename='source/fontawesome-free/css/all.min.css')}}" />
+
+  <link rel="stylesheet" href="{{url_for('static', filename='source/theme/css/adminlte.min.css')}}" />
+
+  <link rel="stylesheet" href="{{url_for('static', filename='source/confirm/jquery-confirm.min.css')}}" />
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+  <link rel="stylesheet" href="{{url_for('static', filename='css/custom.css')}}" />
+  <!--CSS-->
+
+
+  <!--SCRIPTS-->
+  <script type="text/javascript" src="{{url_for('static', filename='source/jquery/jquery.min.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='source/jquery-ui/jquery-ui.min.js')}}"></script>
+
+  <script type="text/javascript"
+    src="{{url_for('static', filename='source/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+  <script type="text/javascript" src="{{url_for('static', filename='source/theme/js/adminlte.js')}}"></script>
+
+  <script type="text/javascript" src="{{url_for('static', filename='source/confirm/jquery-confirm.min.js')}}"></script>
+  
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
+  <script type="text/javascript" src="{{url_for('static', filename='js/custom.js')}}"></script>
+  <!--SCRIPTS-->
+
+</head>
+
+{%if loginPage == 1 %}
+
+<body class="hold-transition login-page">
+  {% block loginContent %}{% endblock %}
+</body>
+
+{%elif loginPage == 2 %}
+
+<body class="hold-transition forgot-page">
+  {% block forgotContent %}{% endblock %}
+</body>
+
+{%else%}
+
+<body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
+  {%include 'menu/topmenu.html'%}
+  {%include 'menu/sidemenu.html'%}
+
+  <!--Page Contant-->
+  <div class="content-wrapper pt-3">
+    <div class="container-fluid">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  <!--Page Contant-->
+</body>
+
+{%endif%}
+
+
+<!--Loaders-->
+<div id="loader">
+  <div class="cv-spinner">
+    <span class="spinner"></span>
+  </div>
+</div>
+<!--Loaders-->
+
+</html>

@@ -1,0 +1,141 @@
+<aside class="main-sidebar sidebar-dark-primary ">
+  <!-- Brand Logo -->
+  <a href="/" class="brand-link text-center row">
+    <span class="col-3"><img src="static\image\bg\R.jpeg" style="height:50px; width:50px; border-radius: 50%;"/></span>
+    <span class="brand-text font-weight-light col-6">{{userDetail.userName}}</span>
+  </a>
+  <!-- Brand Logo -->
+
+  <div class="sidebar">
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        {%if userDetail.userType == "Admin"%}
+        <li class="nav-item" hidden>
+          <a href="/view-attendance" class="nav-link">
+            <i class="nav-icon fas fa-calendar-check"></i>
+            <p>Attendance</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-schedule" class="nav-link">
+            <i class="nav-icon fas fa-calendar-day"></i>
+            <p>Schedule</p>
+          </a>
+        </li>
+
+        <li class="nav-header">Master Data</li>
+
+        <li class="nav-item">
+          <a href="/manage-cource" class="nav-link">
+            <i class="nav-icon fas fa-address-book"></i>
+            <p>Courses</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-lecturers" class="nav-link">
+            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+            <p>Lecturers</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-students" class="nav-link">
+            <i class="nav-icon fas fa-user-graduate"></i>
+            <p>Students</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-subjects" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p>Subjects</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-classes" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>Classes</p>
+          </a>
+        </li>
+        {%elif userDetail.userType == "Staff"%}
+
+        <li class="nav-item">
+          <a href="/attendance-view/?id={{userDetail.tbl_Id}}" class="nav-link">
+            <i class="nav-icon fas fa-calendar-check"></i>
+            <p>Attendance</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/student-view" class="nav-link">
+            <i class="nav-icon fas fa-user-graduate"></i>
+            <p>Students</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-subjects" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p>Subjects</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-cource" class="nav-link">
+            <i class="nav-icon fas fa-address-book"></i>
+            <p>Courses</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-classes" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>Classes</p>
+          </a>
+        </li>
+
+        <li class="nav-item" hidden>
+          <a href="/manage-lecturers" class="nav-link">
+            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+            <p>Edit profile</p>
+          </a>
+        </li>
+        {%elif userDetail.userType == "Student"%}
+
+        <li class="nav-item">
+          <a href="/attendance-stu-view/?id={{userDetail.tbl_Id}}" class="nav-link">
+            <i class="nav-icon fas fa-user-graduate"></i>
+            <p>atendance details</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-classes-stu" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>class list</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-subjects-stu" class="nav-link">
+            <i class="nav-icon fas fa-book"></i>
+            <p>Subjects</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="/manage-cource-stu" class="nav-link">
+            <i class="nav-icon fas fa-address-book"></i>
+            <p>Courses</p>
+          </a>
+        </li>
+        {%endif%}
+
+      </ul>
+    </nav>
+  </div>
+</aside>

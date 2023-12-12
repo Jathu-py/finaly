@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block forgotContent %}
+<style scoped>
+
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+        background-color: #ff99f5;
+        background-image:
+            radial-gradient(at 61% 4%, hsla(303, 91%, 61%, 1) 0px, transparent 50%),
+            radial-gradient(at 75% 66%, hsla(196, 91%, 79%, 1) 0px, transparent 50%),
+            radial-gradient(at 98% 88%, hsla(76, 87%, 78%, 1) 0px, transparent 50%),
+            radial-gradient(at 23% 16%, hsla(238, 96%, 77%, 1) 0px, transparent 50%),
+            radial-gradient(at 95% 65%, hsla(13, 91%, 75%, 1) 0px, transparent 50%),
+            radial-gradient(at 10% 79%, hsla(228, 96%, 69%, 1) 0px, transparent 50%),
+            radial-gradient(at 85% 58%, hsla(328, 81%, 68%, 1) 0px, transparent 50%);
+        background-repeat: no-repeat;
+        color: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15rem 0;
+    }
+    
+    .card {
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        background-color: rgba(0, 0, 0, 0.25);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.125);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 40px;
+    }
+    
+    .lock-icon {
+        font-size: 3rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+        margin-top: 10px;
+        text-transform: uppercase;
+    }
+    
+    p {
+        font-size: 12px;
+    }
+    
+    .passInput {
+        margin-top: 15px;
+        width: 80%;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid deepskyblue;
+        font-size: 15px;
+        color: black;
+        outline: none;
+    }
+    
+    button {
+        margin-top: 15px;
+        width: 80%;
+        background-color: deepskyblue;
+        color: white;
+        padding: 10px;
+        text-transform: uppercase;
+    }
+
+</style>
+
+<div class="card">
+    <p class="lock-icon"><i class="fas fa-lock"></i></p>
+    <h2>Forgot Password?</h2>
+    <p>You can reset your Password here</p>
+    <div class=" dropdownsearch">
+        <label for="exampleFormControlSelect1">Select User Type : </label>
+        <div class="option">
+            <select class="txtstatus" id="dynamic_select">
+                <option value="Admin" selected>Admin</option>
+                <option value="Staff" >Staff</option>
+                <option value="Student" >Student</option>
+            </select>
+        </div>
+    </div>
+    <input type="text" class="passInput" id="passInput" placeholder="Email address">
+    <button id="send_reset">Send My Password</button>
+</div>
+
+<script>
+
+    $("body").on("click", "#send_reset", function () {
+        var formData = new FormData();
+
+        var txtstatus = $(".txtstatus").val();
+        formData.append("txtstatus", txtstatus);
+
+        var txtEmail = $("#passInput").val();
+        formData.append("txtEmail", txtEmail);
+        
+
+        //Validations
+        if (txtstatus == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Select your user type.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        if (txtEmail == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Enter your valid email address.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        //Validations
+
+        $.ajax({
+            url: "/forgor-password",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            if(data.status == 'success'){
+                $.alert({
+                    title: "Success!",
+                    content: "Successfully Reset your password. Please check your mail inbox.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                window.location.href = '/';
+                            },
+                        },
+                    },
+                });
+            }else if (data.status == 'error') {
+                    $.alert({
+                        title: "Alert!",
+                        content: "Contact your admin.",
+                        icon: "fa fa-exclamation-triangle",
+                        type: "orange",
+                        buttons: {
+                            okay: {
+                                text: "close",
+                                btnClass: "btn-red",
+                                action: function () {
+                                    // Reload the page
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                }
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+    });
+
+</script>
+
+
+{%endblock%}

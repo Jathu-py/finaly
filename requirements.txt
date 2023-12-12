@@ -1,0 +1,13 @@
+Flask
+Werkzeug
+pymysql
+Flask-Session
+datetime
+opencv-python
+scipy
+face_recognition
+numpy
+pandas
+Flask-Mail
+random2
+string

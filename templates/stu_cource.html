@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cource Name</th>
+                    <th>Cource Start Date</th>
+                    <th>Cource Details</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {%for cource in cources %}
+                <tr>
+                    <th>{{'%02d' %loop.index}}</th>
+                    <th id="{{cource.courceName}}"+"{{ cource.courseId}}">{{cource.courceName}}</th>
+                    <th id="{{cource.courceStartDate}}"+"{{ cource.courseId}}">{{cource.courceStartDate}}</th>
+                    <th id="{{cource.courceDetails}}"+"{{ cource.courseId}}">{{cource.courceDetails}}</th>
+                    
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable({
+            responsive: true
+        });
+    } );
+</script>
+{% endblock %}

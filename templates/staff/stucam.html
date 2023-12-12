@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+
+
+<div id="web_stream">
+        <h1 center>Camera Stream</h1>
+        <!--<img src="{{ url_for('video_feed') }}" width="640" height="480" center>-->
+        {% if camera_opened %}
+            <img src="{{ url_for('video_feed') }}" width="640" height="480">
+            <br>
+            <a href="{{ url_for('stop_camera') }}">Stop Camera</a>
+            
+        {% else %}
+            <p>Camera is not opened</p>
+            <br>
+            <a href="{{ url_for('start_camera') }}">Start Camera</a>
+    
+            <a type="button"  href="{{url_for('take_photo')}}">takepic</a>
+    
+            {% if photo_path %}
+                <br>
+                <p>Photo taken: <img src="{{ photo_path }}" alt="Captured Photo" width="320" height="240"></p>
+            {% endif %}
+            
+        {% endif %}
+</div>
+
+
+{% endblock %}

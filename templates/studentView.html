@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Student View{% endblock %}
+{% block content %}
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                    <th>Mobile No</th>
+                    <th>Home No</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for student in students %}
+                {%if student.lecturerId |int == userDetail.tbl_Id |int%}
+                <tr>
+                    <th>{{'%02d' %loop.index}}</th>
+                    <th>{{student.studentName}}</th>
+                    <th>{{student.email}}</th>
+                    <th>{{student.dob}}</th>
+                    <th>{{student.gender}}</th>
+                    <th>{{student.mobileNo}}</th>
+                    <th>{{student.homeNo}}</th>
+                    <th>{{student.address}}</th>
+                </tr>
+                {%endif%}
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable({
+            responsive: true
+        });
+    } );
+</script>
+
+{% endblock %}

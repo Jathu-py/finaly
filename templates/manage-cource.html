@@ -1,0 +1,448 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<button data-toggle="modal" data-target="#addNewCource" class="btn btn-dark mb-2">
+    <i class="fas fa-plus"></i> Add Cource
+</button>
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cource Name</th>
+                    <th>Cource Start Date</th>
+                    <th>Cource Details</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for cource in cources %}
+                <tr>
+                    <th>{{'%02d' %loop.index}}</th>
+                    <th id="{{cource.courceName}}"+"{{ cource.courseId}}">{{cource.courceName}}</th>
+                    <th id="{{cource.courceStartDate}}"+"{{ cource.courseId}}">{{cource.courceStartDate}}</th>
+                    <th id="{{cource.courceDetails}}"+"{{ cource.courseId}}">{{cource.courceDetails}}</th>
+                    <th><div class="btn-group" role="group" aria-label="Edit & Delete">
+                        <button  data-toggle="modal" data-target="#editCource" type="button" class="btn btn-warning" id="edit_cource" data-value="{{cource.courceId}}"><i class="fa fa-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-danger" id="delete_cource" data-value="{{cource.courceId}}"><i class="fa fa-trash"></i> Delete</button>
+                      </div>
+                    </th>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!--New Cource-->
+<div class="modal fade" id="addNewCource" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-user-plus"></i> Add New Cource</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtCourceName" class="control-label">Cource :</label>
+                    <input type="text" id='txtCourceName' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtCourceStartDate" class="control-label">Start Date :</label>
+                    <input type="date" id='txtCourceStartDate' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtCourceDetail">Cource Details :</label>
+                    <textarea class="form-control" id="txtCourceDetail" rows="3"></textarea>
+                </div>
+
+                <div class="form-actions text-right">
+                    <button id='btnAddCource' class="btn btn-dark">Add Cource</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--New Cource-->
+
+<!--Edit Cource-->
+<div class="modal fade" id="editCource" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-user-plus"></i> Edit Cource</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group" hidden>
+                    <label for="txtCourceId" class="control-label">Cource Id:</label>
+                    <input type="text" id='txtCourceIdEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtCourceName" class="control-label">Cource :</label>
+                    <input type="text" id='txtCourceNameEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtCourceStartDate" class="control-label">Start Date :</label>
+                    <input type="date" id='txtCourceStartDateEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group" id="txtCourceDetailEditArea">
+                    <label for="txtCourceDetail">Cource Details :</label>
+                </div>
+
+                <div class="form-actions text-right">
+                    <button id='btnUpdateCource' class="btn btn-dark">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Edit Cource-->
+
+
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable({
+            responsive: true
+        });
+    } );
+    //Add Cource
+    $("body").on("click", "#btnAddCource", function () {
+        var formData = new FormData();
+
+        var txtCourceName = $("#txtCourceName").val();
+        formData.append("txtCourceName", txtCourceName);
+
+        var txtCourceStartDate = $("#txtCourceStartDate").val();
+        formData.append("txtCourceStartDate", txtCourceStartDate);
+
+        var txtCourceDetail = $("#txtCourceDetail").val();
+        formData.append("txtCourceDetail", txtCourceDetail);
+
+
+        //Validations
+        if (txtCourceName == "") {
+            $("#txtCourceName").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Cource Name cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                    
+                },
+                
+            });
+            return false;
+        }
+        
+        if (txtCourceStartDate == "") {
+            $("#txtCourceStartDate").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Cource Start Date cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        //Validations
+
+        $.ajax({
+            url: "/add-cource",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+
+                $.alert({
+                    title: "Success!",
+                    content: "cource added <strong>Successfully!</strong>.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+    });
+    //Add Cource
+
+    //Edit Cource
+    $(document).on('click', '#edit_cource', function(event){
+        event.preventDefault();
+        $("#txtCourceDetailEditArea").append();
+        var courceId  = $(this).data('value');
+        console.log(courceId)
+
+        var courseQuery = {{ cources | tojson | safe}}
+
+        for (var i = 0; i < courseQuery.length; i++) {
+            if (courseQuery[i].courceId === parseInt(courceId)) {
+                console.log(courseQuery[i])
+                $('#txtCourceDetailEditArea textarea:last-child').remove();
+
+                $("#txtCourceIdEdit").val(courseQuery[i].courceId);
+                
+                $("#txtCourceNameEdit").val(courseQuery[i].courceName);
+
+                var courceStartDate = new Date(courseQuery[i].courceStartDate);
+
+                // Extract year, month, and date components
+                var year = courceStartDate.getFullYear();
+                var month = ('0' + (courceStartDate.getMonth() + 1)).slice(-2); // Months are 0-indexed
+                var day = ('0' + courceStartDate.getDate()).slice(-2);
+
+                // Construct the formatted date string
+                var formattedDate = year + '-' + month + '-' + day;
+
+                $("#txtCourceStartDateEdit").val(formattedDate);
+
+                $("#txtCourceDetailEditArea").append('<textarea class="form-control" id="txtCourceDetailEdit" rows="3">'+courseQuery[i].courceDetails+'</textarea>');
+
+            }
+        }
+
+    });
+
+    $("body").on('click',"#btnUpdateCource",function(){
+        var formData = new FormData();
+
+        var txtCourceId = $("#txtCourceIdEdit").val();
+        formData.append("txtCourceId", txtCourceId);
+
+        var txtCourceName = $("#txtCourceNameEdit").val();
+        formData.append("txtCourceName", txtCourceName);
+
+        var txtCourceStartDate = $("#txtCourceStartDateEdit").val();
+        formData.append("txtCourceStartDate", txtCourceStartDate);
+
+        var txtCourceDetail = $("#txtCourceDetailEdit").val();
+        formData.append("txtCourceDetail", txtCourceDetail);
+
+        //Validations
+        if (txtCourceId == "") {
+            $("#txtCourceId").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Cource Id cannot be found. Try Again!",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Reload",
+                        btnClass: "btn-orange",
+                        action: function () {
+                            // Reload the page
+                            location.reload();
+                        },
+                    },
+                },
+            });
+            return false;
+        }
+        
+        if (txtCourceName == "") {
+            $("#txtCourceName").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Cource Name cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+
+        if (txtCourceStartDate == "") {
+            $("#txtCourceStartDate").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Cource Start Date cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        //Validations
+
+        $.ajax({
+            url: "/edit-cource",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+
+                $.alert({
+                    title: "Success!",
+                    content: "cource Updated <strong>Successfully!</strong>.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+
+
+    });
+    //Edit Cource
+
+    //Delete Cource
+    $(document).on('click', '#delete_cource', function(event){
+        event.preventDefault();
+        var courceId  = $(this).data('value');
+        var formData = new FormData();
+
+        if (courceId == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Cource Id cannot be found. Try Again!",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Reload",
+                        btnClass: "btn-orange",
+                        action: function () {
+                            // Reload the page
+                            location.reload();
+                        },
+                    },
+                },
+            });
+            return false;
+        }
+
+        formData.append("txtCourceId", courceId);
+
+        $.ajax({
+            url: "/delete-cource",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+                if(data.status == 'success'){
+                    $.alert({
+                        title: "Success!",
+                        content: "cource Deleted <strong>Successfully!</strong>.",
+                        icon: "fa fa-check-circle",
+                        type: "green",
+                        buttons: {
+                            Okay: {
+                                text: "Okay",
+                                btnClass: "btn-green",
+                                action: function () {
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                } else if (data.status == 'error') {
+                    $.alert({
+                        title: "Alert!",
+                        content: "Cource is linked other subject or student.",
+                        icon: "fa fa-exclamation-triangle",
+                        type: "orange",
+                        buttons: {
+                            okay: {
+                                text: "close",
+                                btnClass: "btn-red",
+                                action: function () {
+                                    // Reload the page
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                }
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+
+
+    });
+    //Delete Cource
+</script>
+{% endblock %}

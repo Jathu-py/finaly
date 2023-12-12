@@ -1,0 +1,500 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<button data-toggle="modal" data-target="#addNewSubject" class="btn btn-dark mb-2">
+    <i class="fas fa-plus"></i> Add Classes
+</button>
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Subject Name</th>
+                    <th>Student Name</th>
+                    <th>cource Start Date</th>
+                    <th>cource End Date</th>
+                    <th>Class Time (Start to End)</th>
+                    <th>Action</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+               {%for classes in classes %}
+                <tr>
+                    <th>{{'%03d' %loop.index}}</th>
+
+                    {%for subject in subject%}
+                    {%if subject.subjectId |int == classes.subjectId |int%}
+                    <th>{{subject.subjectName}}</th>
+                    {%endif%}
+                    {%endfor%}
+
+                    {%for students in students%}
+                    {%if students.id |int == classes.studentId |int %}
+                    <th>{{students.studentName}}</th>
+                    {%endif%}
+                    {%endfor%}
+
+                    <th>{{classes.classStartDate}}</th>
+                    <th>{{classes.classEndDate}}</th>
+                    <th><mark style="background:green;">{{classes.classStartTime}}</mark> to <mark style="background:green;">{{classes.classEndTime}}</mark></th>
+                    <th><div class="btn-group" role="group" aria-label="Delete">
+                        <button type="button" class="btn btn-danger" id="delete_classes" data-value="{{classes.classId}}"><i class="fa fa-trash"></i> Delete</button>
+                      </div>
+                    </th>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--New Classes-->
+<div class="modal fade" id="addNewSubject" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-plus-square"></i> Create Class Schedule </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+               
+                <div class=" dropdownsearch">
+                    <label for="exampleFormControlSelect1">Select Subject : </label>
+                    <div class="option">
+                        <select class="txtSubjectId" id="dynamic_select">
+                            <option value="" selected>Select Subject</option>
+                            {%for subject in subject%}
+                            <option value={{subject.subjectId}}>{{subject.subjectName}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="dropdownsearch pt-2 mt-5">
+                    <label for="exampleFormControlSelect1" >Select Student : </label>
+                    <div class="option">
+                        <select class="txtStudentId" id="dynamic_select">
+                            <option value="" selected>Select Student</option>
+                            {%for students in students%}
+                            <option value={{students.id}}>{{students.studentName}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group pt-2 mt-5">
+                    <label for="txtStartDate" class="control-label">Start Date :</label>
+                    <input type="date" id='txtStartDate' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtEndDate" class="control-label">End Date :</label>
+                    <input type="date" id='txtEndDate' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtStartTime" class="control-label">Start Time :</label>
+                    <input type="time" id='txtStartTime' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtEndTime" class="control-label">End Time :</label>
+                    <input type="time" id='txtEndtime' class="form-control" value="">
+                </div>
+
+                <div class="row row-cols-2" id="weekDays">
+                    <label for="txtEndTime" class="control-label col-12">Select week Days :</label>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox8" value="8">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="All Of Them" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox9" value="9">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="Working Days" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox10" value="10">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="Week Ends" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox1" value="1">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="Monday" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox2" value="2">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="Tuesday" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox3" value="3">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="WednesDay" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox3" value="4">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="Thursday" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox5" value="5">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="Friday" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox6" value="6">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="Saturday" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="checkbox" aria-label="Checkbox for following text input" id="checkbox7" value="7">
+                            </div>
+                            </div>
+                            <input type="text" class="form-control" value="Sunday" style="background:transparent; font-weight: bold;" readonly >
+                        </div>
+                    </div>
+                      
+                </div>
+
+
+                <div class="form-actions text-right ">
+                    <button id='btnScheduleCourse' class="btn btn-dark">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--New Classes-->
+
+<script>
+    $(document).ready( function () {
+        /*$('.dataTable').DataTable({
+            responsive: true
+        }); */
+
+        $('#checkbox8').on('change', function() {
+            // If checkbox8 is checked, check all other checkboxes; otherwise, uncheck them
+            if ($(this).prop('checked')) {
+                // Check all checkboxes except checkbox8
+                $('[id^="checkbox"]:not(#checkbox8)').prop('checked', true);
+            } else {
+                // Uncheck all checkboxes except checkbox8
+                $('[id^="checkbox"]:not(#checkbox8)').prop('checked', false);
+            }
+        });
+
+        $('#checkbox10').on('change', function() {
+            // If checkbox9 is checked, check checkbox7 and checkbox6; otherwise, uncheck them
+            if ($(this).prop('checked')) {
+                $('#checkbox7, #checkbox6').prop('checked', true);
+            } else {
+                $('#checkbox7, #checkbox6').prop('checked', false);
+            }
+        });
+
+        $('#checkbox9').on('change', function() {
+            // If checkbox9 is checked, check checkbox7 and checkbox6; otherwise, uncheck them
+            if ($(this).prop('checked')) {
+                $('#checkbox1, #checkbox2, #checkbox3, #checkbox4, #checkbox5').prop('checked', true);
+            } else {
+                $('#checkbox1, #checkbox2, #checkbox3, #checkbox4, #checkbox5').prop('checked', false);
+            }
+        });
+
+        $('#checkbox6, #checkbox7').on('change', function() {
+            // If both checkbox6 and checkbox7 are checked, check checkbox10
+            if ($('#checkbox6').prop('checked') && $('#checkbox7').prop('checked')) {
+                $('#checkbox10').prop('checked', true);
+            } else {
+                // If either checkbox6 or checkbox7 is unchecked, uncheck checkbox10
+                $('#checkbox10').prop('checked', false);
+            }
+        });
+
+        $('#checkbox1, #checkbox2, #checkbox3, #checkbox4, #checkbox5').on('change', function() {
+            // If both checkbox6 and checkbox7 are checked, check checkbox10
+            if ($('#checkbox1').prop('checked') && $('#checkbox2').prop('checked') && $('#checkbox3').prop('checked') && $('#checkbox4').prop('checked') && $('#checkbox5').prop('checked')) {
+                $('#checkbox9').prop('checked', true);
+            } else {
+                // If either checkbox6 or checkbox7 is unchecked, uncheck checkbox10
+                $('#checkbox9').prop('checked', false);
+            }
+        });
+
+        $('#checkbox1, #checkbox2, #checkbox3, #checkbox4, #checkbox5, #checkbox6, #checkbox7, #checkbox10, #checkbox9').on('change', function() {
+            // If both checkbox6 and checkbox7 are checked, check checkbox10
+            if ($('#checkbox10').prop('checked') && $('#checkbox9').prop('checked')) {
+                $('#checkbox8').prop('checked', true);
+            } else {
+                // If either checkbox6 or checkbox7 is unchecked, uncheck checkbox10
+                $('#checkbox8').prop('checked', false);
+            }
+        });
+
+    });
+//Add Classes
+$("body").on("click", "#btnScheduleCourse", function () {
+    var formData = new FormData();
+    var checkedValues = [];
+
+    $('input[type="checkbox"]:checked').each(function() {
+        checkedValues.push($(this).val());
+    });
+
+    formData.append("checkedValues", checkedValues);
+
+    var txtEndtime = $("#txtEndtime").val();
+    formData.append("txtEndtime", txtEndtime);
+
+    var txtStartTime = $("#txtStartTime").val();
+    formData.append("txtStartTime", txtStartTime);
+    
+    var txtEndDate = $("#txtEndDate").val();
+    formData.append("txtEndDate", txtEndDate);
+
+    var txtStartDate = $("#txtStartDate").val();
+    formData.append("txtStartDate", txtStartDate);
+
+    var txtStudentId = $(".txtStudentId").val();
+    formData.append("txtStudentId", txtStudentId);
+
+    var txtSubjectId = $(".txtSubjectId").val();
+    formData.append("txtSubjectId", txtSubjectId);
+
+    //Validations
+    if (checkedValues.length === 0) {
+        $("#weekDays").focus();
+        $.alert({
+            title: "Alert!",
+            content: "Select Week For Class Schedule.",
+            icon: "fa fa-exclamation-triangle",
+            type: "red",
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-red",
+                },
+            },
+        });
+        return false;
+    }
+    if (txtEndtime === "" || txtStartTime === "" || txtEndDate === "" || txtEndDate === "" || txtStudentId === "" || txtSubjectId === "" ) {
+        $("#txtCourseId").focus();
+        $.alert({
+            title: "Alert!",
+            content: "Please Make Sure All Of The Fields Are Filled.",
+            icon: "fa fa-exclamation-triangle",
+            type: "red",
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-red",
+                },
+            },
+        });
+        return false;
+    }
+    //Validations
+
+    $.ajax({
+        url: "/add-classes",
+        type: "POST",
+        cache: false,
+        processData: false,
+        contentType: false,
+        data: formData,
+        beforeSend: function () {
+            $("#loader").show();
+        },
+        success: function (data) {
+            $("#loader").hide();
+            console.log(data);
+
+            $.alert({
+                title: "Success!",
+                content: "Subject added <strong>Successfully!</strong>.",
+                icon: "fa fa-check-circle",
+                type: "green",
+                buttons: {
+                    Okay: {
+                        text: "Okay",
+                        btnClass: "btn-green",
+                        action: function () {
+                            location.reload();
+                        },
+                    },
+                },
+            });
+        },
+        error: function (data) {
+            $("#loader").hide();
+            console.log(data);
+        },
+    });
+});
+//Add Classes
+
+//Delete Classes
+$(document).on('click', '#delete_classes', function(event){
+    event.preventDefault();
+    var txtClassId  = $(this).data('value');
+    var formData = new FormData();
+    formData.append("txtClassId", txtClassId);
+
+    if (txtClassId == "") {
+        $.alert({
+            title: "Alert!",
+            content: "Id cannot be found. Try Again!",
+            icon: "fa fa-exclamation-triangle",
+            type: "red",
+            buttons: {
+                okay: {
+                    text: "Reload",
+                    btnClass: "btn-orange",
+                    action: function () {
+                        // Reload the page
+                        location.reload();
+                    },
+                },
+            },
+        });
+        return false;
+    }else{
+        $.alert({
+            title: "Alert!",
+            content: "Confirm To Delete Press Okay.",
+            icon: "fa fa-exclamation-triangle",
+            type: "red",
+            buttons: {
+                okay: {
+                    text: "Okay",
+                    btnClass: "btn-orange",
+                    action: function () {
+
+                        $.ajax({
+                            url: "/delete-classes",
+                            type: "POST",
+                            cache: false,
+                            processData: false,
+                            contentType: false,
+                            data: formData,
+                            beforeSend: function () {
+                                $("#loader").show();
+                            },
+                            success: function (data) {
+                                $("#loader").hide();
+                                console.log(data);
+                                if(data.status == 'success'){
+                                    $.alert({
+                                        title: "Success!",
+                                        content: "Student Remove Class <strong>Successfully!</strong>.",
+                                        icon: "fa fa-check-circle",
+                                        type: "green",
+                                        buttons: {
+                                            Okay: {
+                                                text: "Okay",
+                                                btnClass: "btn-green",
+                                                action: function () {
+                                                    location.reload();
+                                                },
+                                            },
+                                        },
+                                    });
+                                } 
+                            },
+                            error: function (data) {
+                                $("#loader").hide();
+                                console.log(data);
+                            },
+                        });
+                                            
+                    },
+                },
+                close:{
+                    text: "close",
+                    btnClass: "btn-red",
+                    action: function () {location.reload();},
+
+                },
+            },
+        });
+    }
+
+
+});
+//Delete Classes
+
+
+
+</script>
+
+
+{% endblock %}

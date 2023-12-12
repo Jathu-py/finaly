@@ -1,0 +1,396 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block loginContent %}
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins",
+    sans-serif;
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+.wrapper {
+  position: relative;
+  max-width: 470px;
+  width: 100%;
+  border-radius: 12px;
+  padding: 20px
+    30px
+    120px;
+  background: #4070f4;
+  box-shadow: 0
+    5px
+    10px
+    rgba(
+      0,
+      0,
+      0,
+      0.1
+    );
+  overflow: hidden;
+}
+.form.login {
+  position: absolute;
+  left: 50%;
+  bottom: -86%;
+  transform: translateX(
+    -50%
+  );
+  width: calc(
+    100% +
+      220px
+  );
+  padding: 20px
+    140px;
+  border-radius: 50%;
+  height: 100%;
+  background: #fff;
+  transition: all
+    0.6s
+    ease;
+}
+.wrapper.active
+  .form.login {
+  bottom: -15%;
+  border-radius: 35%;
+  box-shadow: 0 -5px
+    10px rgba(0, 0, 0, 0.1);
+}
+.form
+  header {
+  font-size: 30px;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.form.login
+  header {
+  color: #333;
+  opacity: 0.6;
+}
+.wrapper.active
+  .form.login
+  header {
+  opacity: 1;
+}
+.wrapper.active
+  .signup
+  header {
+  opacity: 0.6;
+}
+.wrapper
+  form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
+}
+form
+  input {
+  height: 60px;
+  outline: none;
+  border: none;
+  padding: 0
+    15px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #333;
+  border-radius: 8px;
+  background: #fff;
+}
+.form.login
+  input {
+  border: 1px
+    solid
+    #aaa;
+}
+.form.login
+  input:focus {
+  box-shadow: 0
+    1px 0
+    #ddd;
+}
+form
+  .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.checkbox
+  input[type="checkbox"] {
+  height: 16px;
+  width: 16px;
+  accent-color: #fff;
+  cursor: pointer;
+}
+form
+  .checkbox
+  label {
+  cursor: pointer;
+  color: #fff;
+}
+form a {
+  color: #333;
+  text-decoration: none;
+}
+form
+  a:hover {
+  text-decoration: underline;
+}
+form
+  input[type="submit"] {
+  margin-top: 15px;
+  padding: none;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.form.login
+  input[type="submit"] {
+  background: #4070f4;
+  color: #fff;
+  border: none;
+}
+</style>
+
+<!-- <div class="login-box">
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center h1">
+            <b>Attendance</b> Management
+        </div>
+        <div class="card-body">
+            <form id="loginForm">
+                <p class="login-box-msg">Sign in</p>
+
+                <div class="input-group mb-3">
+                    <input type="email" id="txtUserName" class="form-control" placeholder="Email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" id="txtPassword" class="form-control" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> -->
+
+
+
+<section class="wrapper">
+    <div class="form signup" id="signupForm">
+      <header>Signup</header>
+      <form >
+        <input type="text" placeholder="Full name" id="name" required />
+        <input type="text" placeholder="Email address" id="email" required />
+        <input type="password" placeholder="Password" id="passwordtxt" required />
+        <div class="checkbox">
+          <input type="checkbox" id="signupCheck" />
+          <label for="signupCheck">I accept all terms & conditions</label>
+        </div>
+        <input type="submit" value="Signup" />
+      </form>
+    </div>
+
+    <div class="form login" id="loginForm">
+      <header>Login</header>
+      <form >
+        <input type="text" placeholder="Email address" id="txtUserName" required />
+        <input type="password" placeholder="Password" id="txtPassword" required />
+        <a href="/forgot">Forgot password?</a>
+        <input type="submit" value="Login" />
+      </form>
+    </div>
+    
+  </section>
+  <input type="hidden" id="txtredirectUrl" value="{{redirectUrl}}">
+
+<script>
+    const wrapper = document.querySelector(".wrapper"),
+      signupHeader = document.querySelector(".signup header"),
+      loginHeader = document.querySelector(".login header");
+    loginHeader.addEventListener("click", () => {
+      wrapper.classList.add("active");
+    });
+    signupHeader.addEventListener("click", () => {
+      wrapper.classList.remove("active");
+    });
+
+    $("body").on("submit", "#loginForm", function (event) {
+        event.preventDefault();
+        var redirectUrl = $("#txtredirectUrl").val();
+
+        var formData = new FormData();
+        var txtUserName = $("#txtUserName").val();
+        formData.append("txtUserName", txtUserName);
+
+        var txtPassword = $("#txtPassword").val();
+        formData.append("txtPassword", txtPassword);
+
+        if (txtUserName == "") {
+            $("#txtUserName").focus();
+            $.alert({
+                title: "Error!",
+                content: "Login username is must needed.",
+                icon: "fa fa-times-circle",
+                type: "red",
+            });
+            return false;
+        }
+
+        if (txtPassword == "") {
+            $("#txtPassword").focus();
+            $.alert({
+                title: "Error!",
+                content: "Login Password is must needed.",
+                icon: "fa fa-times-circle",
+                type: "red",
+            });
+            return false;
+        }
+
+        let endpoint = "/userLogin";
+        $.ajax({
+            url: endpoint,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (result) {
+                console.log(result);
+                const status = result.status;
+
+                if (status == "success") {
+                    if (redirectUrl == "None") {
+                        location.replace("/");
+                    } else {
+                        location.replace(redirectUrl);
+                    }
+                } else {
+                    $("#loader").hide();
+                    $.alert({
+                        title: "Error!",
+                        content:
+                            "Username or Password is incorrect. Please recheck and login again.",
+                        icon: "fa fa-times-circle",
+                        type: "red",
+                    });
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                $("#loader").hide();
+            },
+        });
+    });
+
+    $("body").on("submit", "#signupForm", function (event) {
+      event.preventDefault();
+      var redirectUrl = $("#txtredirectUrl").val();
+
+      var formData = new FormData();
+      var txtUserName = $("#name").val();
+      formData.append("txtUserName", txtUserName);
+
+      var txtPassword = $("#passwordtxt").val();
+      formData.append("txtPassword", txtPassword);
+
+      var txtEmail = $("#email").val();
+      formData.append("txtEmail", txtEmail);
+
+      if (txtUserName == "" || txtEmail == "" || txtPassword == "") {
+          $.alert({
+              title: "Error!",
+              content: "Fill all of the Field.",
+              icon: "fa fa-times-circle",
+              type: "red",
+          });
+          return false;
+      }
+      var isChecked = $("#signupCheck").is(":checked");
+      if (isChecked == false) {
+          $("#signupCheck").focus();
+          $.alert({
+              title: "Error!",
+              content: "Accept the Agrements.",
+              icon: "fa fa-times-circle",
+              type: "red",
+          });
+          return false;
+      }
+
+      let endpoint = "/createUser";
+      $.ajax({
+          url: endpoint,
+          type: "POST",
+          data: formData,
+          contentType: false,
+          cache: false,
+          processData: false,
+          beforeSend: function () {
+              $("#loader").show();
+          },
+          success: function (result) {
+              console.log(result);
+              const status = result.status;
+
+              if (status == "success") {
+                  if (redirectUrl == "None") {
+                      location.replace("/");
+                  } else {
+                      location.replace(redirectUrl);
+                  }
+              } else {
+                  $("#loader").hide();
+                  $.alert({
+                      title: "Error!",
+                      content:
+                          "Please contact Your Administator.",
+                      icon: "fa fa-times-circle",
+                      type: "orange",
+                      buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                  });
+              }
+          },
+          error: function (error) {
+              console.log(error);
+              $("#loader").hide();
+          },
+      });
+  });
+</script>
+{% endblock %}

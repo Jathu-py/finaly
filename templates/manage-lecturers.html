@@ -1,0 +1,467 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<button data-toggle="modal" data-target="#addNewLecturer" class="btn btn-dark mb-2">
+    <i class="fas fa-plus"></i> Add Lecturer
+</button>
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>DOB</th>
+                    <th>NIC/Passport No</th>
+                    <th>Mobile No</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for lecturer in lecturers %}
+                <tr>
+                    <th>{{'%02d' %loop.index}}</th>
+                    <th>{{lecturer.lecturerName}}</th>
+                    <th>{{lecturer.dob}}</th>
+                    <th>{{lecturer.nic}}</th>
+                    <th>{{lecturer.mobileNo}}</th>
+                    <th>{{lecturer.email}}</th>
+                    <th>{{lecturer.address}}</th>
+                    <th><div class="btn-group" role="group" aria-label="Edit & Delete">
+                        <button  data-toggle="modal" data-target="#edit_lecturers" type="button" class="btn btn-warning" id="edit_lecturer" data-value="{{lecturer.id}}"><i class="fa fa-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-danger" id="delete_lecturer" data-value="{{lecturer.id}}"><i class="fa fa-trash"></i> Delete</button>
+                      </div>
+                    </th>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!--New Lecturer-->
+<div class="modal fade" id="addNewLecturer" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-user-plus"></i> Add New Lecturer</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtLecturerName" class="control-label">Name :</label>
+                    <input type="text" id='txtLecturerName' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerDOB" class="control-label">DOB :</label>
+                    <input type="date" id='txtLecturerDOB' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerNIC" class="control-label">NIC/Passport No :</label>
+                    <input type="text" id='txtLecturerNIC' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerMobile" class="control-label">Phone No :</label>
+                    <input type="number" id='txtLecturerMobile' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLectureremail" class="control-label">Email :</label>
+                    <input type="email" id='txtLectureremail' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerAddress" class="control-label">Address :</label>
+                    <input type="text" id='txtLecturerAddress' class="form-control" value="">
+                </div>
+
+                <div class="form-actions text-right">
+                    <button id='btnAddLecturer' class="btn btn-dark">Add Lecturer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--New Lecturer-->
+
+<!--Edit Lecturer-->
+<div class="modal fade" id="edit_lecturers" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-user-plus"></i> Edit Lecturer</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group" hidden>
+                    <label for="txtLecturerIdEdit" class="control-label">Lecturer Id :</label>
+                    <input type="text" id='txtLecturerIdEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerNameEdit" class="control-label">Name :</label>
+                    <input type="text" id='txtLecturerNameEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerDOBEdit" class="control-label">DOB :</label>
+                    <input type="date" id='txtLecturerDOBEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerNICEdit" class="control-label">NIC/Passport No :</label>
+                    <input type="text" id='txtLecturerNICEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerMobileEdit" class="control-label">Phone No :</label>
+                    <input type="number" id='txtLecturerMobileEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLectureremailEdit" class="control-label">Email :</label>
+                    <input type="email" id='txtLectureremailEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="txtLecturerAddressEdit" class="control-label">Address :</label>
+                    <input type="text" id='txtLecturerAddressEdit' class="form-control" value="">
+                </div>
+
+                <div class="form-actions text-right">
+                    <button id='btnUpdateLecturer' class="btn btn-dark">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Edit Lecturer-->
+
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable({
+            responsive: true
+        });
+    } );
+    //Add Lecturer
+    $("body").on("click", "#btnAddLecturer", function () {
+        var formData = new FormData();
+
+        var txtLecturerName = $("#txtLecturerName").val();
+        formData.append("txtLecturerName", txtLecturerName);
+
+        var txtLecturerDOB = $("#txtLecturerDOB").val();
+        formData.append("txtLecturerDOB", txtLecturerDOB);
+
+        var txtLecturerNIC = $("#txtLecturerNIC").val();
+        formData.append("txtLecturerNIC", txtLecturerNIC);
+
+        var txtLecturerMobile = $("#txtLecturerMobile").val();
+        formData.append("txtLecturerMobile", txtLecturerMobile);
+
+        var txtLectureremail = $("#txtLectureremail").val();
+        formData.append("txtLectureremail", txtLectureremail);
+
+        var txtLecturerAddress = $("#txtLecturerAddress").val();
+        formData.append("txtLecturerAddress", txtLecturerAddress);
+
+
+        //Validations
+        if (txtLecturerNameEdit == "" || txtLecturerNICEdit == "" || txtLecturerAddressEdit == "" || txtLecturerDOBEdit == "" || txtLectureremailEdit == "" || txtLecturerMobileEdit == "") {
+            $("#txtLecturerName").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Fields cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        //Validations
+
+        $.ajax({
+            url: "/add-lecturer",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+
+                $.alert({
+                    title: "Success!",
+                    content: "Lecturer added <strong>Successfully!</strong>.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+    });
+    //Add Lecturer
+
+    //Edit Lecturer
+    $(document).on('click', '#edit_lecturer', function(event){
+        event.preventDefault();
+
+        var lecturerId  = $(this).data('value');
+
+        var lecturersQuery = {{ lecturers | tojson | safe}}
+
+        for (var i = 0; i < lecturersQuery.length; i++) {
+            if (lecturersQuery[i].id === parseInt(lecturerId)) {
+                console.log(lecturersQuery[i])
+                $("#txtLecturerIdEdit").val(lecturersQuery[i].id);
+                
+                $("#txtLecturerNameEdit").val(lecturersQuery[i].lecturerName);
+
+                var LecturerDOB = new Date(lecturersQuery[i].dob);
+
+                // Extract year, month, and date components
+                var year = LecturerDOB.getFullYear();
+                var month = ('0' + (LecturerDOB.getMonth() + 1)).slice(-2); // Months are 0-indexed
+                var day = ('0' + LecturerDOB.getDate()).slice(-2);
+
+                // Construct the formatted date string
+                var formattedDate = year + '-' + month + '-' + day;
+
+                $("#txtLecturerDOBEdit").val(formattedDate);
+
+                $("#txtLecturerNICEdit").val(lecturersQuery[i].nic);
+
+                $("#txtLecturerMobileEdit").val(lecturersQuery[i].mobileNo);
+
+                $("#txtLectureremailEdit").val(lecturersQuery[i].email);
+
+                $("#txtLecturerAddressEdit").val(lecturersQuery[i].address);
+
+            }
+        }
+
+    });
+
+    $("body").on('click',"#btnUpdateLecturer",function(){
+        var formData = new FormData();
+
+        var txtLecturerId = $("#txtLecturerIdEdit").val();
+        formData.append("txtLecturerId", txtLecturerId);
+
+        var txtLecturerName = $("#txtLecturerNameEdit").val();
+        formData.append("txtLecturerName", txtLecturerName);
+
+        var txtLecturerDOB = $("#txtLecturerDOBEdit").val();
+        formData.append("txtLecturerDOB", txtLecturerDOB);
+
+        var txtLecturerNIC = $("#txtLecturerNICEdit").val();
+        formData.append("txtLecturerNIC", txtLecturerNIC);
+
+        var txtLecturerMobile = $("#txtLecturerMobileEdit").val();
+        formData.append("txtLecturerMobile", txtLecturerMobile);
+
+        var txtLectureremail = $("#txtLectureremailEdit").val();
+        formData.append("txtLectureremail", txtLectureremail);
+
+        var txtLecturerAddress = $("#txtLecturerAddressEdit").val();
+        formData.append("txtLecturerAddress", txtLecturerAddress);
+
+        //Validations
+        if (txtLecturerId == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Lecturer Id cannot be found. Try Again!",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Reload",
+                        btnClass: "btn-orange",
+                        action: function () {
+                            // Reload the page
+                            location.reload();
+                        },
+                    },
+                },
+            });
+            return false;
+        }
+        
+        if (txtLecturerNameEdit == "" || txtLecturerNICEdit == "" || txtLecturerAddressEdit == "" || txtLecturerDOBEdit == "" || txtLectureremailEdit == "" || txtLecturerMobileEdit == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Field cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        //Validations
+
+        $.ajax({
+            url: "/edit-lecturer",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+
+                $.alert({
+                    title: "Success!",
+                    content: "Lecturer Updated <strong>Successfully!</strong>.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+
+
+    });
+    //Edit Lecturer
+
+    //Delete Lecturer
+    $(document).on('click', '#delete_lecturer', function(event){
+        event.preventDefault();
+        var txtlecturerId  = $(this).data('value');
+        var formData = new FormData();
+
+        if (txtlecturerId == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Lecturer Id cannot be found. Try Again!",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Reload",
+                        btnClass: "btn-orange",
+                        action: function () {
+                            // Reload the page
+                            location.reload();
+                        },
+                    },
+                },
+            });
+            return false;
+        }
+
+        formData.append("txtLecturerId", txtlecturerId);
+
+        $.ajax({
+            url: "/delete-lecturer",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+                if(data.status == 'success'){
+                    $.alert({
+                        title: "Success!",
+                        content: "Lecturer Deleted <strong>Successfully!</strong>.",
+                        icon: "fa fa-check-circle",
+                        type: "green",
+                        buttons: {
+                            Okay: {
+                                text: "Okay",
+                                btnClass: "btn-green",
+                                action: function () {
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                } else if (data.status == 'error') {
+                    $.alert({
+                        title: "Alert!",
+                        content: "Lecturer is linked in Subject.",
+                        icon: "fa fa-exclamation-triangle",
+                        type: "orange",
+                        buttons: {
+                            okay: {
+                                text: "close",
+                                btnClass: "btn-red",
+                                action: function () {
+                                    // Reload the page
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                }
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+
+
+    });
+    //Delete Lecturer
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>cource Name</th>
+                    <th>Subject Name</th>
+                    <th>Lecturer Name</th>
+
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {%for subject in subjects %}
+                <tr>
+                    <th>{{'%02d' %loop.index}}</th>
+                    {%for course in course%}
+                    {%if subject.courceId == course.courceId%}
+                    <th>{{course.courceName}}</th>
+                    {%endif%}
+                    {%endfor%}
+
+                    <th>{{subject.subjectName}}</th>
+
+                    {%for lecturer in lecturer%}
+                    {%if subject.lecturerId == lecturer.id%}
+                    <th>{{lecturer.lecturerName}}</th>
+                    {%endif%}
+                    {%endfor%}
+                    
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable({
+            responsive: true
+        });       
+    } );
+
+</script>
+{% endblock %}

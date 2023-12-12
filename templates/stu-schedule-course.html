@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Subject Name</th>
+                    <th>Student Name</th>
+                    <th>cource Start Date</th>
+                    <th>cource End Date</th>
+                    <th>Class Time (Start to End)</th>
+
+                    
+                </tr>
+            </thead>
+            <tbody>
+               {%for classes in classes %}
+                <tr>
+                    <th>{{'%03d' %loop.index}}</th>
+
+                    {%for subject in subject%}
+                    {%if subject.subjectId |int == classes.subjectId |int%}
+                    <th>{{subject.subjectName}}</th>
+                    {%endif%}
+                    {%endfor%}
+
+                    {%for students in students%}
+                    {%if students.id |int == classes.studentId |int %}
+                    <th>{{students.studentName}}</th>
+                    {%endif%}
+                    {%endfor%}
+
+                    <th>{{classes.classStartDate}}</th>
+                    <th>{{classes.classEndDate}}</th>
+                    <th><mark style="background:green;">{{classes.classStartTime}}</mark> to <mark style="background:green;">{{classes.classEndTime}}</mark></th>
+                    
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<script>
+    <script>
+        $(document).ready( function () {
+            $('.dataTable').DataTable({
+                responsive: true
+            }); });
+</script>
+
+
+{% endblock %}

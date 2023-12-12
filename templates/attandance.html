@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+
+<a type="button" href="/take_atus/?id={{userDetail.tbl_Id}}" class="btn btn-dark mb-2">
+    <i class="fa fa-camera" aria-hidden="true"></i> Start Attendance
+    </a>
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Studen Name</th>
+                    <th>Attend Time</th>
+                    <th>Lecturer Name</th>                </tr>
+            </thead>
+            <tbody>
+                {%for attendance in attendance %}
+                <tr>
+                    <th>{{'%02d' %loop.index}}</th>
+                    {%for student in student%}
+                    {%if student.id |int == attendance.studentId|int%}
+                    <th>{{student.studentName}}</th>
+                    {%endif%}
+                    {%endfor%}
+
+                    <th>{{attendance.attendanceTime}}</th>
+                    
+
+                    {%for lecturers in lecturers%}
+                    {%if lecturers.id |int == attendance.lecturerId|int%}
+                    <th>{{lecturers.lecturerName}}</th>
+                    {%endif%}
+                    {%endfor%}
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable({
+            responsive: true
+        });       
+    } );
+</script>
+
+{%endblock%}

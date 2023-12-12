@@ -1,0 +1,489 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<button data-toggle="modal" data-target="#addNewSubject" class="btn btn-dark mb-2">
+    <i class="fas fa-plus"></i> Add Subject
+</button>
+
+<div class="card shadow">
+    <div class="card-body">
+        <table class='table table-striped table-ver-center dataTable'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>cource Name</th>
+                    <th>Subject Name</th>
+                    <th>Lecturer Name</th>
+                    <th>Action</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {%for subject in subjects %}
+                <tr>
+                    <th>{{'%02d' %loop.index}}</th>
+                    {%for course in course%}
+                    {%if subject.courceId == course.courceId%}
+                    <th>{{course.courceName}}</th>
+                    {%endif%}
+                    {%endfor%}
+
+                    <th>{{subject.subjectName}}</th>
+
+                    {%for lecturer in lecturer%}
+                    {%if subject.lecturerId == lecturer.id%}
+                    <th>{{lecturer.lecturerName}}</th>
+                    {%endif%}
+                    {%endfor%}
+                    <th><div class="btn-group" role="group" aria-label="Edit & Delete">
+                        <button  data-toggle="modal" data-target="#edit_subjects" type="button" class="btn btn-warning" id="edit_subject" data-value="{{subject.subjectId}}"><i class="fa fa-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-danger" id="delete_subject" data-value="{{subject.subjectId}}"><i class="fa fa-trash"></i> Delete</button>
+                      </div>
+                    </th>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--New Subject-->
+<div class="modal fade" id="addNewSubject" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-plus-square"></i> Add New Subject</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class=" dropdownsearch">
+                    <label for="exampleFormControlSelect1">Select Course : </label>
+                    <div class="option">
+                        <select class="txtCourseId" id="dynamic_select">
+                            <option value="" selected>Select Course</option>
+                            {%for course in course%}
+                            <option value={{course.courceId}}>{{course.courceName}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group mt-5 pt-3 dropdownsearch">
+                    <label for="txtSubjectName" class="control-label">Subject Name :</label>
+                    <input type="text" id='txtSubjectName' class="form-control" value="">
+                </div>
+
+                <div class=" dropdownsearch">
+                    <label for="exampleFormControlSelect1">Select Lecturer : </label>
+                    <div class="option">
+                        <select class="txtLecturerId" id="dynamic_select">
+                            <option value="" selected>Select Lecturer</option>
+                            {%for lecturer in lecturer%}
+                            <option value={{lecturer.id}}>{{lecturer.lecturerName}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+                      
+                      
+
+                <div class="form-actions text-right pt-5 mt-5">
+                    <button id='btnAddSubject' class="btn btn-dark">Add Subject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--New Subject-->
+
+<!--Edit Subject-->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="edit_subjects" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> <i class="fas fa-user-plus"></i> Edit Student</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group" hidden>
+                    <label for="txtSubjectIdEdit" class="control-label">Student Id :</label>
+                    <input type="text" id='txtSubjectIdEdit' class="form-control" value="">
+                </div>
+
+                <div class=" dropdownsearch">
+                    <div class="option" id="optionCource">
+                        <label  for="exampleFormControlSelect1" >Selected Course Is  : <i id="txtCourseIdLabel" style='color:red'></i></label>
+                        <select class="txtCourseIdEdit" id="dynamic_select">
+                            <option  value = "0" selected>Select Course</option>
+                            {%for course in course%}
+                            <option value={{course.courceId}}>{{course.courceName}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="txtSubjectNameEdit" class="control-label">Subject Name :</label>
+                    <input type="text" id='txtSubjectNameEdit' class="form-control" value="">
+                </div>
+
+                <div class=" dropdownsearch">
+                    <label  for="exampleFormControlSelect1" >Selected Lecturer Is  : <i id="txtLecturerIdLabel" style='color:red'></i></label>
+                    <div class="option" id="optionLecturer">
+                        <select class="txtLecturerIdEdit" id="dynamic_select">
+                            <option value="0" selected>Select Lecturer</option>
+                            {%for lecturer in lecturer%}
+                            <option value={{lecturer.id}}>{{lecturer.lecturerName}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions text-right">
+                    <button id='btnUpdateSubject' class="btn btn-dark">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Edit Subject-->
+
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable({
+            responsive: true
+        });       
+    } );
+
+    //Add Subject
+    $("body").on("click", "#btnAddSubject", function () {
+        var formData = new FormData();
+
+        var txtSubjectName = $("#txtSubjectName").val();
+        formData.append("txtSubjectName", txtSubjectName);
+
+        var txtCourseId = $(".txtCourseId").val();
+        formData.append("txtCourseId", txtCourseId);
+        
+        var txtLecturerId = $(".txtLecturerId").val();
+        formData.append("txtLecturerId", txtLecturerId);
+
+        //Validations
+        if (txtSubjectName == "") {
+            $("#txtSubjectName").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Subject Name cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        if (txtCourseId == "") {
+            $("#txtCourseId").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Course Name cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        if (txtLecturerId == "") {
+            $("#txtLecturerId").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Lecturer Name cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        //Validations
+
+        $.ajax({
+            url: "/add-subject",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+
+                $.alert({
+                    title: "Success!",
+                    content: "Subject added <strong>Successfully!</strong>.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+    });
+    //Add Subject
+
+    //Edit Subject
+    var courceIdE
+    var lecturerIdE
+    $(document).on('click', '#edit_subject', function(event){
+        event.preventDefault();
+        var subjectId  = $(this).data('value');
+        var subjectsQuery = {{ subjects | tojson | safe}}
+        var lecturerQuery = {{ lecturer | tojson | safe}}
+        var courseQuery = {{ course | tojson | safe}}
+
+        for (var i = 0; i < subjectsQuery.length; i++) {
+            if (subjectsQuery[i].subjectId === parseInt(subjectId)) {
+                console.log(subjectsQuery[i])
+
+                $("#txtSubjectIdEdit").val(subjectsQuery[i].subjectId);
+                
+                $("#txtSubjectNameEdit").val(subjectsQuery[i].subjectName);
+
+
+                for(var y = 0; y<lecturerQuery.length; y++){
+                    if(subjectsQuery[i].lecturerId === parseInt(lecturerQuery[y].id)){
+                        $("#txtLecturerIdLabel").text(lecturerQuery[y].lecturerName)
+                        lecturerIdE = parseInt(lecturerQuery[y].id)
+                    }
+                }       
+
+                for(var z = 0; z<courseQuery.length; z++){
+                    if(subjectsQuery[i].courceId === parseInt(courseQuery[z].courceId)){
+                        $("#txtCourseIdLabel").text(courseQuery[z].courceName)
+                        courceIdE =parseInt(courseQuery[z].courceId)
+                    }
+                }              
+                
+                
+                
+            }
+        }
+
+    });
+
+    $("body").on('click',"#btnUpdateSubject",function(){
+        var formData = new FormData();
+
+        var txtSubjectId = $("#txtSubjectIdEdit").val();
+        formData.append("txtSubjectId", txtSubjectId);
+
+        var txtSubjectName = $("#txtSubjectNameEdit").val();
+        formData.append("txtSubjectName", txtSubjectName);
+
+        var txtCourseId = $(".txtCourseIdEdit").val();
+        
+        var txtLecturerId = $(".txtLecturerIdEdit").val();
+        console.log(txtCourseId,txtLecturerId)
+        //Validations
+        if (txtSubjectId == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Subject Id cannot be found. Try Again!",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Reload",
+                        btnClass: "btn-orange",
+                        action: function () {
+                            // Reload the page
+                            location.reload();
+                        },
+                    },
+                },
+            });
+            return false;
+        }
+        
+        if (txtSubjectName == "") {
+            $("#txtSubjectNameEdit").focus();
+            $.alert({
+                title: "Alert!",
+                content: "Subject Name cannot be empty.",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Okay",
+                        btnClass: "btn-red",
+                    },
+                },
+            });
+            return false;
+        }
+        if ( parseInt(txtCourseId) == 0) {formData.append("txtCourseId", courceIdE)}else{formData.append("txtCourseId", txtCourseId);}
+
+        if (parseInt(txtLecturerId) == 0) {formData.append("txtLecturerId", lecturerIdE)}else{formData.append("txtLecturerId", txtLecturerId);}
+        //Validations
+
+        $.ajax({
+            url: "/edit-subject",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+
+                $.alert({
+                    title: "Success!",
+                    content: "Student Updated <strong>Successfully!</strong>.",
+                    icon: "fa fa-check-circle",
+                    type: "green",
+                    buttons: {
+                        Okay: {
+                            text: "Okay",
+                            btnClass: "btn-green",
+                            action: function () {
+                                location.reload();
+                            },
+                        },
+                    },
+                });
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+
+
+    });
+    //Edit Subject
+
+    //Delete Subject
+    $(document).on('click', '#delete_subject', function(event){
+        event.preventDefault();
+        var courceId  = $(this).data('value');
+        var formData = new FormData();
+
+        if (courceId == "") {
+            $.alert({
+                title: "Alert!",
+                content: "Cource Id cannot be found. Try Again!",
+                icon: "fa fa-exclamation-triangle",
+                type: "red",
+                buttons: {
+                    okay: {
+                        text: "Reload",
+                        btnClass: "btn-orange",
+                        action: function () {
+                            // Reload the page
+                            location.reload();
+                        },
+                    },
+                },
+            });
+            return false;
+        }
+
+        formData.append("txtCourceId", courceId);
+
+        $.ajax({
+            url: "/delete-subject",
+            type: "POST",
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: formData,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (data) {
+                $("#loader").hide();
+                console.log(data);
+                if(data.status == 'success'){
+                    $.alert({
+                        title: "Success!",
+                        content: "cource Deleted <strong>Successfully!</strong>.",
+                        icon: "fa fa-check-circle",
+                        type: "green",
+                        buttons: {
+                            Okay: {
+                                text: "Okay",
+                                btnClass: "btn-green",
+                                action: function () {
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                } else if (data.status == 'error') {
+                    $.alert({
+                        title: "Alert!",
+                        content: "Cource is linked other subject or student.",
+                        icon: "fa fa-exclamation-triangle",
+                        type: "orange",
+                        buttons: {
+                            okay: {
+                                text: "close",
+                                btnClass: "btn-red",
+                                action: function () {
+                                    // Reload the page
+                                    location.reload();
+                                },
+                            },
+                        },
+                    });
+                }
+            },
+            error: function (data) {
+                $("#loader").hide();
+                console.log(data);
+            },
+        });
+
+
+    });
+    //Delete Subject
+   
+</script>
+{% endblock %}

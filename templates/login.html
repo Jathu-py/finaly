@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block loginContent %}
+
+<div class="login-box">
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center h1">
+            <b>Attendance</b> Management
+        </div>
+        <div class="card-body">
+            <form id="loginForm">
+                <p class="login-box-msg">Sign in</p>
+
+                <div class="input-group mb-3">
+                    <input type="email" id="txtUserName" class="form-control" placeholder="Email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" id="txtPassword" class="form-control" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="txtredirectUrl" value="{{redirectUrl}}">
+
+<script>
+    $("body").on("submit", "#loginForm", function (event) {
+        event.preventDefault();
+        var redirectUrl = $("#txtredirectUrl").val();
+
+        var formData = new FormData();
+        var txtUserName = $("#txtUserName").val();
+        formData.append("txtUserName", txtUserName);
+
+        var txtPassword = $("#txtPassword").val();
+        formData.append("txtPassword", txtPassword);
+
+        if (txtUserName == "") {
+            $("#txtUserName").focus();
+            $.alert({
+                title: "Error!",
+                content: "Login username is must needed.",
+                icon: "fa fa-times-circle",
+                type: "red",
+            });
+            return false;
+        }
+
+        if (txtPassword == "") {
+            $("#txtPassword").focus();
+            $.alert({
+                title: "Error!",
+                content: "Login Password is must needed.",
+                icon: "fa fa-times-circle",
+                type: "red",
+            });
+            return false;
+        }
+
+        let endpoint = "/userLogin";
+        $.ajax({
+            url: endpoint,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function () {
+                $("#loader").show();
+            },
+            success: function (result) {
+                console.log(result);
+                const status = result.status;
+
+                if (status == "success") {
+                    if (redirectUrl == "None") {
+                        location.replace("/");
+                    } else {
+                        location.replace(redirectUrl);
+                    }
+                } else {
+                    $("#loader").hide();
+                    $.alert({
+                        title: "Error!",
+                        content:
+                            "Username or Password is incorrect. Please recheck and login again.",
+                        icon: "fa fa-times-circle",
+                        type: "red",
+                    });
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                $("#loader").hide();
+            },
+        });
+    });
+</script>
+{% endblock %}
