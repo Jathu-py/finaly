@@ -9,5 +9,4 @@ face_recognition
 numpy
 pandas
 Flask-Mail
-random2
 string
